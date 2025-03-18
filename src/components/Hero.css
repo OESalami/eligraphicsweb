@@ -1,0 +1,24 @@
+@media (min-width: 774px) and (max-width: 1274px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container .flex-col {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .container .flex-col img {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .container .flex-col .text-center {
+        text-align: center;
+    }
+
+    .container .flex-col .text-left {
+        text-align: center;
+    }
+}

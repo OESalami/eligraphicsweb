@@ -3,7 +3,7 @@ import { Link } from 'react-scroll'
 
 const SideMenu = ({toggleMenu, menuOpen}) => {
   return (
-    <div  className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] text-gray-200 h-full bg-gradient-to-b from-blue-900 to-gray-900 transform transition-transform duration-300 flex flex-col z-50 ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div  className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:w-[30rem] text-gray-200 h-full bg-black transform transition-transform duration-300 flex flex-col z-50 ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
        {/* Close Button */}
        <div className="flex justify-end p-4">
             <button>
@@ -14,12 +14,12 @@ const SideMenu = ({toggleMenu, menuOpen}) => {
 
         {/* Menu Items */}
         <div className='flex flex-col space-y-4 p-4 text-xl font-bold'>
-        <Link to='home' smooth={true}  duration={500} className='hover:text-gray-400 cursor-pointer'>Home</Link>
-        <Link to='about' smooth={true}  duration={500} className='hover:text-gray-400 cursor-pointer'>About</Link>
-        <Link to='menu' smooth={true}  duration={500} className='hover:text-gray-400 cursor-pointer'>Service</Link>
-        <Link to='gallery' smooth={true}  duration={500} className='hover:text-gray-400 cursor-pointer'>Testimonial</Link>
+        <Link to='home' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Home</Link>
+        <Link to='about' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>About</Link>
+        <Link to='menu' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Service</Link>
+        <Link to='gallery' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Testimonial</Link>
         <Link to='reserve' smooth={true} duration={500}>
-            <button className='py-2 px-6 bg-yellow-400 text-white font-semibold rounded-full hover:bg-yellow-600'>Contact</button>
+            <button className='py-2 px-6 bg-blue-500 text-white font-semibold rounded-full hover:bg-purple-500'>Contact</button>
         </Link>
         </div>
 
