@@ -13,7 +13,7 @@ const SideMenu = ({toggleMenu, menuOpen}) => {
       
 
         {/* Menu Items */}
-        <div className='flex flex-col space-y-4 p-4 text-xl font-bold'>
+        <div className='flex flex-col space-y-4 p-4 text-xl font-semibold'>
         <Link to='home' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Home</Link>
         <Link to='about' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>About</Link>
         <Link to='service' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Service</Link>

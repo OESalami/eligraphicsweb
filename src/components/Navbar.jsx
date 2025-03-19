@@ -19,7 +19,7 @@ const Navbar = () => {
       </div>
 
       {/* Middle - Links */}
-      <div className='text-xl font-semibold items-center'>
+      <div className='text-xl items-center'>
         <div className='hidden md:flex space-x-4 justify-center items-center'>
         <Link to='home' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Home</Link>
         <Link to='about' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>About</Link>
