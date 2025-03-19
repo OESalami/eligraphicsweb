@@ -16,9 +16,9 @@ const SideMenu = ({toggleMenu, menuOpen}) => {
         <div className='flex flex-col space-y-4 p-4 text-xl font-bold'>
         <Link to='home' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Home</Link>
         <Link to='about' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>About</Link>
-        <Link to='menu' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Service</Link>
-        <Link to='gallery' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Testimonial</Link>
-        <Link to='reserve' smooth={true} duration={500}>
+        <Link to='service' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Service</Link>
+        <Link to='testimonial' smooth={true}  duration={500} className='hover:text-blue-400 cursor-pointer'>Testimonial</Link>
+        <Link to='contact' smooth={true} duration={500}>
             <button className='py-2 px-6 bg-blue-500 text-white font-semibold rounded-full hover:bg-purple-500'>Contact</button>
         </Link>
         </div>
