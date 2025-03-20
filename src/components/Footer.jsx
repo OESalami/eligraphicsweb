@@ -23,28 +23,28 @@ const Footer = () => {
         <div className="flex space-x-4 mt-4 md:mt-0">
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="#"
+            href="https://www.facebook.com/share/1DSu8aHKiJ/?mibextid=wwXIfr"
             className="text-gray-300 hover:text-blue-400 text-2xl transition"
           >
             <FaFacebook />
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="https://www.facebook.com/share/1DSu8aHKiJ/?mibextid=wwXIfr"
+            href="#"
             className="text-gray-300 hover:text-blue-400 text-2xl transition"
           >
             <FaTwitter />
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="#"
+            href="https://www.instagram.com/elidevelopers?igsh=MWdoOThxcWYxZTdnNQ%3D%3D&utm_source=qr"
             className="text-gray-300 hover:text-blue-400 text-2xl transition"
           >
             <FaInstagram />
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="https://www.instagram.com/elidevelopers?igsh=MWdoOThxcWYxZTdnNQ%3D%3D&utm_source=qr"
+            href="#"
             className="text-gray-300 hover:text-blue-400 text-2xl transition"
           >
             <FaLinkedin />
