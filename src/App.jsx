@@ -1,22 +1,35 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
 import Service from './components/Service'
 import Testimonial from './components/Testimonial'
+import SellWithUs from './pages/SellWithUs'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
-const App = () => {
+const Home = () => {
   return (
     <main>
-    <Navbar />
-    <Hero />
-    <About />
-    <Service />
-    <Testimonial />
-    <Contact />
-    <Footer />
+      <Hero />
+      <About />
+      <Service />
+      <Testimonial />
+      <Contact />
     </main>
+  )
+}
+
+const App = () => {
+  return (
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sellwithus" element={<SellWithUs />} />
+      </Routes>
+      <Footer />
+    </Router>
   )
 }
 

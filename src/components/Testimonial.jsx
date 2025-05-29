@@ -43,7 +43,7 @@ const Testimonial3D = () => {
         What Our Clients Say
       </h2>
       <p className="text-xl space-x-2  font-extrabold text-gray-200 md:text-xl text-center mb-10 max-w-2xl">
-        Your Success Is Our Priority – See How We Deliver Excellence!
+        Your Success Is Our Priority. See How We Deliver Excellence!
       </p>
 
       {/* Testimonial Container */}
