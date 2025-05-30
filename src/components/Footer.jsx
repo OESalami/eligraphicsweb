@@ -7,7 +7,7 @@ const Footer = () => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="relative w-full bg-black backdrop-blur-md py-6 px-6 text-center text-white border-t border-white/20"
+      className="relative w-full bg-black/90 backdrop-blur-sm py-6 px-6 text-center text-white border-t border-white/20"
     >
       {/* Top Section */}
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between">
