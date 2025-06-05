@@ -5,6 +5,7 @@ import About from './components/About'
 import Service from './components/Service'
 import Testimonial from './components/Testimonial'
 import SellWithUs from './pages/SellWithUs'
+import SellerDetails from './pages/SellerDetails' // <-- Add this import
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -27,6 +28,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sellwithus" element={<SellWithUs />} />
+        <Route path="/seller-details" element={<SellerDetails />} /> {/* Add this line */}
       </Routes>
       <Footer />
     </Router>

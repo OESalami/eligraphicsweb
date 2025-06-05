@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
-import heroImage from '../assets/hero-image.jpg'; // Adjust path as needed
+import heroImage from '../assets/hero-image.png'; // Adjust path as needed
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBullhorn, faHandshake, faChartLine, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom'; // <-- Add this import
 
 // Global Styles
 const GlobalStyle = createGlobalStyle`
@@ -14,6 +15,7 @@ const SellWithUs = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const panelRef = useRef(null);
+  const navigate = useNavigate(); // <-- Add this line
 
   const toggleFAQ = (index) => {
     setOpenFAQ(openFAQ === index ? null : index);
@@ -41,7 +43,9 @@ const SellWithUs = () => {
           >
             <h1>Partner With Us to Sell Your Products</h1>
             <p>Reach more buyers without spending on ads. Get paid for every successful sale.</p>
-            <CallToActionButton>Start Selling Today</CallToActionButton>
+            <CallToActionButton onClick={() => navigate('/seller-details')}>
+              Start Selling Today
+            </CallToActionButton>
           </HeroContent>
         </HeroSection>
 
@@ -196,6 +200,7 @@ const SellWithUs = () => {
             </motion.p>
             <CTAButtonGroup>
               <PrimaryButton
+                onClick={() => navigate('/seller-details')}
                 as={motion.button}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
