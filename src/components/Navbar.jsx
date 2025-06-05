@@ -1,20 +1,18 @@
 import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { HiBars3BottomRight } from 'react-icons/hi2';
-import { useState } from 'react';  // Remove useEffect
+import React, { useState } from 'react';
 import SideMenu from './SideMenu';
+import Logo from '../assets/images/logo.png';
 import useActiveTab from '../hooks/useActiveTab';
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    // Remove isScrolled state
     const navigate = useNavigate();
     const location = useLocation();
     const { activeTab, handleSetActiveTab } = useActiveTab();
 
     const isSellWithUsPage = location.pathname === '/sellwithus';
-
-    // Remove useEffect scroll handler
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -39,13 +37,22 @@ const Navbar = () => {
       transition-colors duration-300
     `;
 
+    // Example: adjust these paths to match your routes
+    const activeNav = 
+      location.pathname === '/sell-with-us' ? 'sell-with-us'
+      : location.pathname === '/' ? 'home'
+      : '';
+
     return (
-        <header className={`sticky ${isSellWithUsPage ? 'bg-black' : 'bg-black'} 
+        <header className={`sticky ${isSellWithUsPage ? 'bg-[#111111]' : 'bg-[#111111]'} 
 text-gray-200 top-0 z-50 transition-colors duration-300`}>
             <nav className="container h-20 mx-auto flex items-center justify-between py-4 px-6">
                 {/* Left - Logo */}
-                <div className=''>
-                    <ScrollLink to="/" className='text-3xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-extrabold uppercase cursor-pointer'>EliGWeb</ScrollLink>
+                <div className="flex items-center">
+                    <ScrollLink to="/" className="flex items-center text-3xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-extrabold uppercase cursor-pointer">
+                        <img src={Logo} alt="Logo" className="h-12 w-12 mr-2 text-blue" />
+                        <h3 className="text-white m-0 p-0 sm:text-2">ELIGWEB</h3>
+                    </ScrollLink>
                 </div>
 
                 {/* Middle - Links */}
