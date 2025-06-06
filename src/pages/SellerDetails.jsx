@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-
 const SellerDetails = () => {
-  const [previewImages, setPreviewImages] = useState([]);
+const [previewImages, setPreviewImages] = useState([]);
   const [showModal, setShowModal] = useState(false); // Modal state
 
   const handleImageChange = (e) => {
