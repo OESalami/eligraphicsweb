@@ -1,19 +1,35 @@
 import React, { useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-const SellerDetails = () => {
-const [previewImages, setPreviewImages] = useState([]);
-  const [showModal, setShowModal] = useState(false); // Modal state
+import emailjs from 'emailjs-com';
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 4);
-    const previewUrls = files.map(file => URL.createObjectURL(file));
-    setPreviewImages(previewUrls);
+const SellerDetails = () => {
+  const [previewImages, setPreviewImages] = useState([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    whatsapp: '',
+    email: '',
+    category: '',
+    location: '',
+    paymentMethod: 'Mobile Money',
+    account: '',
+    accountName: '',
+    files: [],
+  });
+  const [showModal, setShowModal] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Form Submission
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [agreed, setAgreed] = useState(false); // Add this line
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files).slice(0, 30); // Allow up to 30 files
+    setPreviewImages(files.map(file => URL.createObjectURL(file)));
+    setFormData(prev => ({ ...prev, files }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,29 +37,90 @@ const [previewImages, setPreviewImages] = useState([]);
       alert('You must agree to the terms and conditions.');
       return;
     }
+    setIsLoading(true);
 
-    const formData = new FormData(e.target);
+    const sellerFolder = formData.name
+      ? formData.name.replace(/[^a-zA-Z0-9-_]/g, '_')
+      : `seller_${Date.now()}`;
 
-    const response = await fetch('https://formspree.io/f/xjkrveyr', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
-    if (response.ok) {
-      setIsSubmitted(true);
-      setPreviewImages([]); // Clear images after submit
-      e.target.reset(); // optional: clears the form
-
-      // Hide success message after 1 minute
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 60000);
-    } else {
-      alert('Something went wrong. Try again.');
+    // 1. Upload files to Cloudinary
+    let uploadedUrls = [];
+    try {
+      if (formData.files.length > 0) {
+        const uploadPromises = formData.files.map(file => {
+          const data = new FormData();
+          data.append('file', file);
+          data.append('upload_preset', 'seller_unasigned'); // <-- Replace with your preset
+          data.append('folder', `eligweb_sellers/${sellerFolder}`);
+          return fetch('https://api.cloudinary.com/v1_1/dv7hzerjn/auto/upload', { // <-- Replace with your cloud name
+            method: 'POST',
+            body: data,
+          })
+          .then(res => res.json())
+          .then(res => res.secure_url);
+        });
+        uploadedUrls = await Promise.all(uploadPromises);
+      }
+    } catch (err) {
+      alert('Failed to upload images/videos. Please try again.');
+      setIsLoading(false);
+      return;
     }
+
+    // 2. Prepare folder URL (or array of URLs)
+    const folderUrl = `https://res.cloudinary.com/dv7hzerjn/image/upload/eligweb_sellers/${sellerFolder}/`; // <-- Replace with your cloud name
+
+    // 3. Send to Google Sheets
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbzj53jOBMviC_t7OecVyzeMdDZMQJ_kksT3vFQA0gV3VqTvE8aSdreZihJRI9fmdNUO/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          images: uploadedUrls, // send array of URLs
+          folder: folderUrl
+        })
+      });
+    } catch (err) {
+      alert(`Failed to submit: ${err.message}`);
+      setIsLoading(false);
+      return;
+    }
+
+    // 4. Send to EmailJS
+    emailjs.send(
+      'service_71gkp3l',
+      'template_6ffbjg9',
+      {
+        ...formData,
+        images: uploadedUrls.join(', '),
+        folder: folderUrl
+      },
+      'RARgA_cwPenH2Zs2r'
+    )
+    .then(() => {
+      setIsSubmitted(true);
+      setPreviewImages([]);
+      setFormData({
+        name: '',
+        whatsapp: '',
+        email: '',
+        category: '',
+        location: '',
+        paymentMethod: 'Mobile Money',
+        account: '',
+        accountName: '',
+        files: [],
+      });
+      setTimeout(() => setIsSubmitted(false), 60000);
+    })
+    .catch(err => {
+      alert('Submission failed: ' + (err.message || err));
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
   };
 
   // Modal component
@@ -135,41 +212,52 @@ const [previewImages, setPreviewImages] = useState([]);
           <p className="text-xs text-gray-400 mt-2 italic font-['Inter']">We'll never share your information. Your success is our priority.</p>
         </div>
 
-        <form 
-          onSubmit={handleSubmit}
-          className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8">
-          {/* Update each input group with these classes */}
+        <form onSubmit={handleSubmit} className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8">
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-            <input 
-              type="text" 
-              placeholder="Enter your name" 
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Enter your name"
               className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
+              required
             />
           </div>
-
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-            <input 
-              type="email" 
-              placeholder="you@example.com" 
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="you@example.com"
               className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
+              required
             />
           </div>
-
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number</label>
-            <input 
-              type="tel" 
+            <input
+              type="tel"
               name="whatsapp"
-              placeholder="+233xxxxxxxxx" 
+              value={formData.whatsapp}
+              onChange={handleInputChange}
+              placeholder="+233xxxxxxxxx"
               className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
+              required
             />
           </div>
-
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">Product Category</label>
-            <select name='product category' className="mt-1 w-full px-4 pr-6 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 hover:border-blue-300">
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="mt-1 w-full px-4 pr-6 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 hover:border-blue-300"
+              required
+            >
               <option value="">Select a category</option>
               <option value="fashion">Fashion</option>
               <option value="drinks">Drinks</option>
@@ -181,64 +269,75 @@ const [previewImages, setPreviewImages] = useState([]);
               <option value="other">Other</option>
             </select>
           </div>
-
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="location"
-              placeholder="Accra, Kumasi" 
+              value={formData.location}
+              onChange={handleInputChange}
+              placeholder="Accra, Kumasi"
               className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
+              required
             />
           </div>
-
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Payment Method</label>
-            <select className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 hover:border-blue-300">
+            <select
+              name="paymentMethod"
+              value={formData.paymentMethod}
+              onChange={handleInputChange}
+              className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 hover:border-blue-300"
+              required
+            >
               <option>Mobile Money</option>
               <option>Bank Transfer</option>
             </select>
           </div>
-
           <div className="group transition-all duration-300">
             <label className="block text-sm font-medium text-gray-700 mb-2">MoMo/Bank Details</label>
-            <input 
-              type="text" 
-              placeholder="055XXXXXXX or UBA 0123456789" 
+            <input
+              type="text"
+              name="account"
+              value={formData.account}
+              onChange={handleInputChange}
+              placeholder="055XXXXXXX or UBA 0123456789"
               className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
+              required
             />
           </div>
-
           <div className="group transition-all duration-300">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
-            <input 
-              type="text" 
-              placeholder="John Doe" 
-              className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
-            />
-          </div>
-
+          <label className="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
+          <input
+            type="text"
+            name="accountName"
+            value={formData.accountName}
+            onChange={handleInputChange}
+            placeholder="Enter account holder's name"
+            className="mt-1 w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 hover:border-blue-300"
+            required
+          />
+        </div>
           {/* Image Upload Section */}
           <div className="lg:col-span-2 space-y-3">
-            <label className="block text-sm font-medium text-gray-700">Upload Product Images</label>
+            <label className="block text-sm font-medium text-gray-700">Upload Product Images or Videos</label>
             <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-500 transition-colors duration-300">
-              <input 
-              name="images"
-                type="file" 
-                accept="image/*" 
-                multiple 
+              <input
+                name="media"
+                type="file"
+                accept="image/*,video/*" // Accept images and videos
+                multiple
                 onChange={handleImageChange}
-                className="hidden" 
+                className="hidden"
                 id="file-upload"
               />
               <label htmlFor="file-upload" className="cursor-pointer">
                 <div className="space-y-2">
                   <div className="text-blue-500">Click to upload or drag and drop</div>
-                  <p className="text-sm text-gray-400">You can upload up to 4 images per product</p>
+                  <p className="text-sm text-gray-400">You can upload up to 30 images or videos per product</p>
                 </div>
               </label>
             </div>
-            
             <div className="grid grid-cols-4 gap-4 mt-4">
               {previewImages.map((src, index) => (
                 <motion.div
@@ -246,16 +345,23 @@ const [previewImages, setPreviewImages] = useState([]);
                   animate={{ opacity: 1, scale: 1 }}
                   key={index}
                 >
-                  <img 
-                    src={src} 
-                    alt={`preview-${index}`} 
-                    className="w-full h-24 object-cover rounded-lg border shadow-sm hover:shadow-md transition-shadow duration-300" 
-                  />
+                  {formData.files[index] && formData.files[index].type.startsWith('video') ? (
+                    <video
+                      src={src}
+                      controls
+                      className="w-full h-24 object-cover rounded-lg border shadow-sm hover:shadow-md transition-shadow duration-300"
+                    />
+                  ) : (
+                    <img
+                      src={src}
+                      alt={`preview-${index}`}
+                      className="w-full h-24 object-cover rounded-lg border shadow-sm hover:shadow-md transition-shadow duration-300"
+                    />
+                  )}
                 </motion.div>
               ))}
             </div>
           </div>
-
           {/* Terms and Conditions Checkbox */}
           <div className="lg:col-span-2 flex items-center mt-2">
             <input
@@ -277,24 +383,27 @@ const [previewImages, setPreviewImages] = useState([]);
               </button>
             </label>
           </div>
-
           {/* Buttons Section */}
           <div className="pt-6 lg:col-span-2">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <button 
-                type="submit" 
-                className="w-full lg:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-10 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-md"
-                disabled={!agreed} // Disable if not agreed
+              <button
+                type="submit"
+                className="w-full lg:w-auto bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-10 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-md flex items-center justify-center"
+                disabled={!agreed || isLoading}
                 style={{ opacity: agreed ? 1 : 0.6, cursor: agreed ? 'pointer' : 'not-allowed' }}
               >
-                Submit Application
-              </button>
-
-              {/* Form successful message display*/}
-                {isSubmitted && (
-                  <p className="text-green-600 font-medium text-sm mt-4">✅ Application submitted successfully! We'll contact you soon.</p>
+                {isLoading ? (
+                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                ) : (
+                  "Submit Application"
                 )}
-
+              </button>
+              {isSubmitted && (
+                <p className="text-green-600 font-medium text-sm mt-4">✅ Application submitted successfully! We'll contact you soon.</p>
+              )}
               <span className="text-center text-gray-400 font-semibold lg:mx-4">OR</span>
               <span className="w-full lg:w-auto text-center flex flex-col items-center lg:items-start">
                 <span className="text-gray-500 mb-1">Having trouble with the form?</span>
@@ -313,6 +422,6 @@ const [previewImages, setPreviewImages] = useState([]);
       </motion.div>
     </div>
   );
-}
+};
 
 export default SellerDetails;
