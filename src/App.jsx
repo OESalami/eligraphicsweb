@@ -6,6 +6,7 @@ import Service from './components/Service'
 import Testimonial from './components/Testimonial'
 import SellWithUs from './pages/SellWithUs'
 import SellerDetails from './pages/SellerDetails' // <-- Add this import
+import ApplicantsPage from './pages/ApplicantsPage' // <-- Add this import
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/sellwithus" element={<SellWithUs />} />
         <Route path="/seller-details" element={<SellerDetails />} /> {/* Add this line */}
+        <Route path="/applicants" element={<ApplicantsPage />} /> {/* Add this line */}
       </Routes>
       <Footer />
     </Router>
