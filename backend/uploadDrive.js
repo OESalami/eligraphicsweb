@@ -17,8 +17,10 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
 // Google Drive Auth Setup
+const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
+
 const auth = new google.auth.GoogleAuth({
-  keyFile: path.join(__dirname, 'service-account.json'), // Download from Google Cloud Console
+  credentials: serviceAccount,
   scopes: ['https://www.googleapis.com/auth/drive'],
 });
 const drive = google.drive({ version: 'v3', auth });
