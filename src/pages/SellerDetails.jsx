@@ -347,7 +347,10 @@ const SellerDetails = () => {
         //   body: uploadData,
         // });
 
-        const res = await fetch('http://localhost:5000/api/upload-drive', {
+        // Backend URL for Google Drive upload (Render.com)
+        const API_BASE_URL = "https://eligweb-backend.onrender.com";
+
+        const res = await fetch(`${API_BASE_URL}/api/upload-drive`, {
         method: 'POST',
         body: uploadData,
       });

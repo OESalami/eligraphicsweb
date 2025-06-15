@@ -109,6 +109,11 @@ text-gray-200 top-0 z-50 transition-colors duration-300`}>
                         >
                             Sell with us
                         </RouterLink>
+                        <RouterLink 
+                            to='/applicants'
+                        >
+                            Applicants
+                        </RouterLink>
                         {isMainPage ? (
                             <ScrollLink 
                                 to='contact' 

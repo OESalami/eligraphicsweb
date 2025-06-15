@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 const services = [
   {
-    name: "Web Development",
+    name: "Website Development",
     points: [
       "Business Websites",
       "Personal Websites",
@@ -21,19 +21,34 @@ const services = [
     name: "Gift Card Trading",
     points: [
       "Secure Transactions",
-      "Wide Range of Cards",,
+      "Wide Range of Cards",
     ],
   },
   {
     name: "Social Media Marketing",
     points: [
-      "Audience Engagement",
+      "Followers, Likes, Comments, Shares, Views, Subscribers and more",
+
     ],
   },
   {
     name: "AR Business Marketing",
     points: [
       "SmartConnect Cards",
+    ],
+  },
+  {
+    name: "Ads Marketing",
+    points: [
+      "Facebook Ads",
+      "Instagram Ads",
+    ],
+  },
+  {
+    name: "Commission Based Ads",
+    points: [
+      "Earn without Advertising",
+      "5% Commission on Sales",
     ],
   },
 ];
