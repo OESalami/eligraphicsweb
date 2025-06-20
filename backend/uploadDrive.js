@@ -76,6 +76,10 @@ function getFolderUrl(folderId) {
 
 // Main Upload Route
 router.post('/upload-drive', upload.array('files', 30), async (req, res) => {
+  
+console.log('Seller Info:', req.body);
+console.log('Files received:', req.files);
+
   try {
     const { sellerName, sellerEmail } = req.body;
     const files = req.files;
@@ -89,8 +93,14 @@ router.post('/upload-drive', upload.array('files', 30), async (req, res) => {
 
     // 2. Upload files
     for (const file of files) {
-      await uploadFileToFolder(file, folderId);
-      fs.unlinkSync(file.path); // Clean up local file
+    try {
+    await uploadFileToFolder(file, folderId);
+    fs.unlinkSync(file.path);
+    } catch (error) {
+      console.error('Failed uploading file:', file.originalname, error);
+    }
+      // await uploadFileToFolder(file, folderId);
+      // fs.unlinkSync(file.path); // Clean up local file
     }
 
     // 3. Make folder public

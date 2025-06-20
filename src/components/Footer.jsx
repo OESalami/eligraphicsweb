@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaWhatsapp, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -30,15 +30,15 @@ const Footer = () => {
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.2 }}
-            href="#"
-            className="text-gray-300 hover:text-blue-400 text-2xl transition"
+            href="https://wa.me/233532518124?text=Hello%20Eligraphics%20and%20Web"
+            className="text-gray-300 hover:text-blue-400 text-2xl transition hover:text-green-400"
           >
-            <FaTwitter />
+            <FaWhatsapp />
           </motion.a>
           <motion.a
             whileHover={{ scale: 1.2 }}
             href="https://www.instagram.com/elidevelopers?igsh=MWdoOThxcWYxZTdnNQ%3D%3D&utm_source=qr"
-            className="text-gray-300 hover:text-blue-400 text-2xl transition"
+            className="text-gray-300 hover:text-blue-400 text-2xl transition hover:text-pink-400"
           >
             <FaInstagram />
           </motion.a>

@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/sellwithus" element={<SellWithUs />} />
         <Route path="/seller-details" element={<SellerDetails />} /> {/* Add this line */}
-        <Route path="/applicants" element={<ApplicantsPage />} /> {/* Add this line */}
+        <Route path="/agents" element={<ApplicantsPage />} /> {/* Add this line */}
       </Routes>
       <Footer />
     </Router>
