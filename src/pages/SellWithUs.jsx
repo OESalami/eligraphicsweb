@@ -877,31 +877,25 @@ const benefitCards = [
 const faqData = [
   {
     question: "How much can I earn?",
-    answer:  `You decide your product price. After we deduct our agreed commission, the rest goes directly to you. There's no limit, your earnings grow with your sales. For example, if you sell something for GHS 100 and we take just 10%, you keep GHS 90.
-              Sell 10 of those in a week? That's GHS 900 straight to you.
-              No limits. No hidden fees. Just real earnings for every sale.`
+    answer:  `Set your own product price. After we take our agreed commission, the rest is yours. Sell for GHS 100 with a 10% commission? You keep GHS 90. Sell 10 in a week? That’s GHS 900. No limits, no hidden fees just real earnings`
   },
   {
     question: "What type of products can I sell?",
-    answer: `You can sell just about anything people want from fashion and beauty to digital products and handmade items.
-            As long as it’s legal, safe, and in demand, we’re happy to help you reach buyers who are looking for it.
-            Not sure if your product fits? Just reach out and we’ll let you know!`
+    answer: `From fashion and beauty to digital and handmade products, you can sell almost anything in demand. As long as it’s legal and safe, we’ll help you reach buyers. Not sure if your product fits? Just ask!`
   },
   {
     question: "How long does it take to get approved?",
-    answer: `We usually review applications within 24 to 48 hours.
-            If everything looks good, you’ll get a message from us (via WhatsApp or email) with the next steps.
-            It’s quick, simple, and we’ll guide you through the process.`
+    answer: `We review applications within 24 to 48 hours. If all looks good, you'll hear from us via WhatsApp or email with the next steps. It's quick, simple, and we're here to guide you.`
   },
   {
     question: "When and how do I get paid?",
-    answer: `We usually approve new sellers within 24 to 48 hours.
-            Once you're approved:
-            • We’ll message you to confirm your product details and commission.
-            • We add your products to our system.
-            • We start promoting for you.
-            • When orders come in, we notify you and you get paid!
-            You can choose to receive payments via Mobile Money or bank transfer whichever works best for you.`
+    answer: `We usually approve new sellers within 24 to 48 hours. Once you're approved:
+• We confirm your product details and commission
+• Your products are added to our system
+• We start promoting for you
+• When orders come in, we notify you and you get paid
+
+You can choose to receive payments via Mobile Money or bank transfer, whichever works best for you.`
   }
 ];
 
