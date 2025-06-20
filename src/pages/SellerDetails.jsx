@@ -117,6 +117,7 @@ const SellerForm = ({
   setPreviewImages,
   setFormData
 }) => (
+  
   <form onSubmit={handleSubmit} className="space-y-6 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8">
     {/* Input Fields */}
     <div className="group transition-all duration-300">
@@ -435,6 +436,21 @@ const SellerDetails = () => {
           </h2>
           <p className="text-gray-600 mt-4 font-['Inter'] text-lg">Fill out the form below to become a seller. We'll review your info and reach out within 24–48 hours.</p>
           <p className="text-xs text-gray-400 mt-2 italic font-['Inter']">We'll never share your information. Your success is our priority.</p>
+
+          {/* Form Maintenance Message */}
+          <div className="mt-4 bg-red-100 text-red-700 px-4 py-3 rounded-lg text-sm text-center">
+            <strong>❗ Form Notice:</strong> Our application form is currently under maintenance.
+            Please{' '}
+            <a
+              href="https://wa.me/233532518124?text=Hi!%20I'm%20interested%20in%20becoming%20a%20seller.%20Here%20are%20my%20details%3A%0A%0AFull%20Name%3A%20%0AWhatsApp%20Number%3A%20%0AEmail%3A%20%0AAccount%20Name%3A%20%0AProduct%20Category%3A%20%0ALocation%3A%20%0APayment%20Method%3A%20%0AMoMo/Bank%20Details%3A%20%0A%0A(Please%20attach%20images%2Fvideo%20of%20your%20products)"
+              className="underline font-semibold"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              apply via WhatsApp
+            </a>{' '}
+            while we resolve the issue.
+          </div>
         </div>
         <SellerForm
           formData={formData}

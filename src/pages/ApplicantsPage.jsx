@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link as ScrollLink } from 'react-scroll';
 import styled, { keyframes } from 'styled-components';
 import { FiChevronDown } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import emailjs from 'emailjs-com';
 
 const testimonials = [
   { name: 'Daniel K.', comment: 'Becoming a Growth Partner changed my life. The commission structure is generous and the process is smooth.' },
@@ -13,9 +14,9 @@ const testimonials = [
 ];
 
 const faqs = [
-  { question: 'How do I earn commissions?', answer: 'You earn a commission for every buyer you refer who makes a successful purchase.' },
+  { question: 'How do I earn commissions?', answer: 'Get paid a commission for every pair of buyers you bring in who complete a purchase.' },
   { question: 'Is there any cost to join?', answer: 'No. Joining our referral program is completely free.' },
-  { question: 'When do I get paid?', answer: 'Payments are made weekly or monthly, depending on your preference and payout threshold.' }
+  { question: 'When do I get paid?', answer: 'You get paid daily for every successful purchase made by your referrals.' }
 ];
 
 const gradientAnimation = keyframes`
@@ -109,14 +110,6 @@ const PrimaryButton = styled.button`
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
   transition: all 0.3s ease;
 
-  @media (max-width: 768px) {
-    padding: 14px 28px;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 300px;
-    margin: 10px auto 0;
-  }
-
   &:hover {
     box-shadow: 0 6px 25px rgba(99, 102, 241, 0.4);
     transform: translateY(-2px);
@@ -186,6 +179,11 @@ const Testimonial = styled(motion.div)`
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
 
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+
   p {
     font-size: 1.2rem;
     font-style: italic;
@@ -210,6 +208,8 @@ const PartnerCount = styled.p`
   font-weight: 500;
 `;
 
+// The rest of the file remains unchanged.
+
 const FAQItem = ({ question, answer }) => {
   const [open, setOpen] = useState(false);
 
@@ -223,6 +223,12 @@ const FAQItem = ({ question, answer }) => {
     </FAQItemStyled>
   );
 };
+
+const PageContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+`;
 
 const FAQItemStyled = styled.div`
   background: none;
@@ -296,8 +302,82 @@ const TextArea = styled.textarea`
 `;
 
 export default function ApplicantsPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessageVisible, setSuccessMessageVisible] = useState(false);
+
+
+  const emailServiceID = 'service_hqwez6r';
+  const emailTemplateID = 'template_ywxfhul';
+  const emailUserID = 'RARgA_cwPenH2Zs2r';
+
+  const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  phone: '',
+  location: '',
+  reason: '',
+  });
+
+  const handleChange = (e) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const sendEmail = () => {
+  return emailjs.send(emailServiceID, emailTemplateID, formData, emailUserID);
+  };
+
+  const sendToGoogleSheet = () => {
+  const sheetEndpoint = "https://script.google.com/macros/s/AKfycbyXWYyGSfMHjHlY9Noa7_Mo290pt_oEOoU6hwTN4LDWQ0Y2lrgvJvjRp2_eZz3sog-F3g/exec";
+
+  return fetch(sheetEndpoint, {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: { "Content-Type": "application/json" },
+  });
+  };
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  const url = "https://script.google.com/macros/s/AKfycbzyF0JBqstURDxTeBRQAWR08SOyPZ_gBKhe7as7lXVN41pyXjv8VViKiutYC9r_FrEk/exec";
+  const form = e.target;
+  const formEncoded = `Name=${encodeURIComponent(form.name.value)}&Email=${encodeURIComponent(form.email.value)}&Phone=${encodeURIComponent(form.phone.value)}&Location=${encodeURIComponent(form.location.value)}&Reason=${encodeURIComponent(form.reason.value)}`;
+
+  try {
+    // Send to both email and Google Sheet
+    await Promise.all([
+      sendEmail(),
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formEncoded,
+      }).then(res => res.text())
+    ]);
+
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      location: '',
+      reason: '',
+    });
+    
+    setSuccessMessageVisible(true);
+    setTimeout(() => setSuccessMessageVisible(false), 1000); // 1 minutes
+
+  } catch (error) {
+    console.error("Submission error:", error);
+    alert("There was an error. Please try again. Or you can apply via WhatsApp.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
   return (
     <div className="overflow-hidden">
+      <PageContainer>
+        <motion.div initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.5 }}>
       <CTASection>
         <CTAContent>
           <motion.h2 initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.6 }}>
@@ -317,7 +397,7 @@ export default function ApplicantsPage() {
       <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
         <SectionTitle>Why Join Our Referral Program?</SectionTitle>
         <HighlightBox>
-          Earn money by connecting people to products they already need. No investment, no hassle—just share and earn. Whether you’re a student, entrepreneur, or simply have a strong network, this is your opportunity to grow with us.
+          Earn money by connecting people to products they already need. No investment, no hassle. Just share and earn. Whether you’re a student, entrepreneur, or simply have a strong network, this is your opportunity to grow with us.
         </HighlightBox>
       </SectionContainer>
 
@@ -345,20 +425,52 @@ export default function ApplicantsPage() {
           Fill out the form below and we’ll get back to you shortly.
         </p>
         <FormContainer>
-          <Form>
-            <Input type="text" placeholder="Full Name" required />
-            <Input type="email" placeholder="Email Address" required />
-            <Input type="tel" placeholder="Phone Number" required />
-            <Input type="text" placeholder="Location (City, Country)" required />
-            <TextArea rows="4" placeholder="Tell us briefly why you'd be a great Growth Partner" required />
-            <PrimaryButton type="submit">Submit Application</PrimaryButton>
+          <Form onSubmit={handleSubmit}>
+            <Input type="text" name='name' value={formData.name} onChange={handleChange} placeholder="Full Name" required />
+            <Input type="email" name='email' value={formData.email} onChange={handleChange} placeholder="Email Address" required />
+            <Input type="tel" name='phone' value={formData.phone} onChange={handleChange} placeholder="Phone Number" required />
+            <Input type="text" name='location' value={formData.location} onChange={handleChange} placeholder="Location (City, Country)" required />
+            <TextArea rows="4" name='reason' value={formData.reason} onChange={handleChange} placeholder="Tell us briefly why you'd be a great Growth Partner (optional)"/>
+            <PrimaryButton 
+              type="submit"
+              disabled={isSubmitting}
+              className={`w-full py-2 px-4 rounded-lg text-white ${
+                isSubmitting ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"
+              }`}
+            >
+            {isSubmitting ? "Submitting..." : "Submit"}
+            </PrimaryButton>
+
+            <AnimatePresence>
+            {successMessageVisible && (
+            <motion.p 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{ 
+              color: '#10B981', 
+              textAlign: 'center', 
+              marginTop: '15px', 
+              fontWeight: '500', 
+              fontSize: '1rem' 
+            }}>
+              ✅ Application submitted successfully! We’ll be in touch soon.
+            </motion.p>
+            )}
+            </AnimatePresence>
+
+
+
             <p style={{ textAlign: 'center', marginTop: '10px', fontWeight: '600', color: '#6b7280' }}>OR</p>
-            <WhatsAppLink href="https://wa.me/233501234567?text=Hello!%20I'm%20interested%20in%20becoming%20a%20Growth%20Partner.%20Here%20are%20my%20details%3A%0A-Name%3A%20%0A-Email%3A%20%0APhone%3A%20%0ALocation%3A%20%0AReason%3A%20" target="_blank">
-              <FaWhatsapp /> Apply via WhatsApp
+            <WhatsAppLink href="https://wa.me/233532518124?text=Hello!%20I'm%20interested%20in%20becoming%20a%20Growth%20Partner.%20Here%20are%20my%20details%3A%0A-Name%3A%20%0A-Email%3A%20%0APhone%3A%20%0ALocation%3A%20%0AReason%3A%20" target="_blank">
+               Apply via WhatsApp
             </WhatsAppLink>
           </Form>
         </FormContainer>
       </SectionContainer>
+      </motion.div>
+    </PageContainer>
     </div>
   );
 }

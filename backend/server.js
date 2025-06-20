@@ -1,7 +1,6 @@
 /**
  * Minimal Express server to use the Google Drive upload route
  */
-
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -11,8 +10,13 @@ const driveUploadRouter = require('./uploadDrive'); // Make sure this matches yo
 
 const app = express();
 
+// ✅ CORS setup - allow localhost and production frontend
+app.use(cors({
+  origin: ["http://localhost:5173", "https://your-frontend-domain.com"],
+  credentials: true,
+}));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

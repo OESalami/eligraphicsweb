@@ -126,7 +126,7 @@ const ContactPage = () => {
 
           {/* Submit Button */}
           <motion.button
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.0 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
             className="w-full py-3 bg-blue-500 text-white font-bold rounded-md mt-4 hover:bg-blue-600 transition"
