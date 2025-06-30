@@ -12,7 +12,7 @@ const Navbar = () => {
     const location = useLocation();
     const { activeTab, handleSetActiveTab } = useActiveTab();
 
-    const isSellWithUsPage = location.pathname === '/sellwithus';
+    const isSellWithUsPage = location.pathname === '/partnership';
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -39,7 +39,7 @@ const Navbar = () => {
 
     // Example: adjust these paths to match your routes
     const activeNav = 
-      location.pathname === '/sell-with-us' ? 'sell-with-us'
+      location.pathname === '/partnership' ? 'partnership'
       : location.pathname === '/' ? 'home'
       : '';
 
@@ -103,11 +103,11 @@ text-gray-200 top-0 z-50 transition-colors duration-300`}>
                             </>
                         )}
                         <RouterLink 
-                            to='/sellwithus' 
-                            className={navItemStyles('sellwithus')}
-                            onClick={() => handleSetActiveTab('sellwithus')}
+                            to='/partnership' 
+                            className={navItemStyles('partnership')}
+                            onClick={() => handleSetActiveTab('partnership')}
                         >
-                            Sell with us
+                            Partnership
                         </RouterLink>
                         <RouterLink 
                             to='/agents'
