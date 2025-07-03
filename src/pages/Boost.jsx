@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled, { keyframes } from 'styled-components';
 import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
@@ -634,6 +634,130 @@ const isAccountBased = (serviceName) => {
   return accountKeywords.some(keyword => serviceName.toLowerCase().includes(keyword.toLowerCase()));
 };
 
+// Modal styles
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  pointer-events: auto;
+`;
+
+const ModalBox = styled.div`
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  padding: 22px 20px 18px 20px;
+  min-width: 290px;
+  max-width: 95vw;
+  margin: 32px 32px 32px 32px;
+  position: relative;
+  z-index: 1001;
+  @media (max-width: 600px) {
+    margin: 18px 8px 8px 8px;
+    min-width: 0;
+    width: 90vw;
+    max-width: 340px;
+    padding: 12px 6px 10px 10px;
+    border-radius: 12px;
+    /* Add more space around the modal */
+    box-sizing: border-box;
+  }
+`;
+
+const ModalTitle = styled.div`
+  font-weight: 700;
+  font-size: 1.13rem;
+  margin-bottom: 8px;
+  color: #007bff;
+`;
+
+const ModalClose = styled.button`
+  position: absolute;
+  top: 8px; right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #888;
+  cursor: pointer;
+`;
+
+const CopyBtn = styled.button`
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 0.98rem;
+  border-radius: 5px;
+  border: 1px solid #b6e0ff;
+  background: #f0f7ff;
+  color: #007bff;
+  cursor: pointer;
+  &:active { background: #e0f2fe; }
+`;
+
+const SendProofBtn = styled.a`
+  display: inline-block;
+  margin-top: 14px;
+  background: #25d366;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 7px;
+  padding: 9px 18px;
+  text-decoration: none;
+  font-size: 1.04rem;
+  box-shadow: 0 2px 8px rgba(37,211,102,0.08);
+  transition: background 0.2s;
+  &:hover { background: #128c7e; }
+`;
+
+function PaymentModal({ open, onClose }) {
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef();
+
+  const momoNumber = "0532518124";
+  const momoName = "Salami Malachi";
+  const whatsappMsg = encodeURIComponent(
+    `Hi, I just sent: \nMoMo Name: \nPlease send a screenshot of your payment.`
+  );
+  const whatsappUrl = `https://wa.me/233532518124?text=${whatsappMsg}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(momoNumber);
+    setCopied(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setCopied(false), 1200);
+  };
+
+  if (!open) return null;
+  return (
+    <ModalOverlay>
+      <ModalBox>
+        <ModalClose onClick={onClose} title="Close">&times;</ModalClose>
+        <ModalTitle>Send Payment Proof</ModalTitle>
+        <div style={{marginBottom: 8}}>
+          <b>After payment, send a screenshot of your payment.</b>
+        </div>
+        <div style={{marginBottom: 7}}>
+          <span style={{fontWeight: 600}}>Momo Number:</span> {momoNumber}
+          <CopyBtn onClick={handleCopy}>{copied ? "Copied!" : "Copy"}</CopyBtn>
+        </div>
+        <div style={{marginBottom: 7}}>
+          <span style={{fontWeight: 600}}>Account Name:</span> {momoName}
+        </div>
+        <SendProofBtn
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Send Proof
+        </SendProofBtn>
+      </ModalBox>
+    </ModalOverlay>
+  );
+}
+
 const Boost = () => {
   // Set initial state using the new structure
   const [selectedPlatform, setSelectedPlatform] = useState(platforms[0]);
@@ -642,6 +766,7 @@ const Boost = () => {
   const [accountLink, setAccountLink] = useState('');
   const [loading, setLoading] = useState(false);
   const [started, setStarted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Price is now based on the selected quantity object
   const price = quantity.price.toFixed(2);
@@ -693,8 +818,26 @@ const Boost = () => {
     setLoading(false);
   };
 
+  // Show modal every 2 minutes
+  useEffect(() => {
+    let interval;
+    let timeout;
+    function showModal() {
+      setModalOpen(true);
+      // Optionally auto-close after X seconds:
+      // timeout = setTimeout(() => setModalOpen(false), 20000);
+    }
+    showModal(); // Show on first load
+    interval = setInterval(showModal, 20000); // Every 2 min
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <PageContainer>
+      <PaymentModal open={modalOpen} onClose={() => setModalOpen(false)} />
       <FormCard
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
