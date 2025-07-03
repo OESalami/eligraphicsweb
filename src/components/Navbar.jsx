@@ -44,7 +44,7 @@ const Navbar = () => {
       : '';
 
     return (
-        <header className={`sticky ${isSellWithUsPage ? 'bg-[#111111]' : 'bg-[#111111]'} 
+        <header className={`sticky ${isSellWithUsPage ? 'bg-[#0b0b0d]' : 'bg-[#0b0b0d]'} 
 text-gray-200 top-0 z-50 transition-colors duration-300`}>
             <nav className="container h-20 mx-auto flex items-center justify-between py-4 px-6">
                 {/* Left - Logo */}
