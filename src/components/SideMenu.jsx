@@ -158,15 +158,26 @@ const SideMenu = ({toggleMenu, menuOpen}) => {
                 )}
                 
                 <RouterLink 
-                    to='/sellwithus' 
-                    className={`${menuItemStyles('sellwithus')} py-2`}
+                    to='/partnership' 
+                    className={`${menuItemStyles('partnership')} py-2`}
                     onClick={() => {
-                        handleSetActiveTab('sellwithus');
+                        handleSetActiveTab('partnership');
                         toggleMenu();
                     }}
                 >
-                    Sell with us
+                    Partnership
                 </RouterLink>
+                <RouterLink 
+                    to='/booster' 
+                    className={`${menuItemStyles('booster')} py-2`}
+                    onClick={() => {
+                        handleSetActiveTab('booster');
+                        toggleMenu();
+                    }}
+                >
+                    Booster
+                </RouterLink>
+                <RouterLink to='/agents' > </RouterLink>
 
                 {/* Contact Button */}
                 {isMainPage ? (

@@ -51,7 +51,9 @@ text-gray-200 top-0 z-50 transition-colors duration-300`}>
                 <div className="flex items-center">
                     <ScrollLink to="/" className="flex items-center text-3xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-extrabold uppercase cursor-pointer">
                         <img src={Logo} alt="Logo" className="h-12 w-12 mr-2 text-blue" />
-                        <h3 className="text-white m-0 p-0 sm:text-2">ELIGWEB</h3>
+                        <h3 className="m-0 p-0 sm:text-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hidden sm:block">
+                            ELIGWEB
+                        </h3>
                     </ScrollLink>
                 </div>
 
@@ -110,8 +112,17 @@ text-gray-200 top-0 z-50 transition-colors duration-300`}>
                             Partnership
                         </RouterLink>
                         <RouterLink 
+                            to='/booster' 
+                            className={navItemStyles('booster')}
+                            onClick={() => handleSetActiveTab('booster')}
+                        >
+                            Booster
+                        </RouterLink>
+                        <RouterLink 
                             to='/agents'
-                        > </RouterLink>
+                        > 
+                        </RouterLink>
+
                         {isMainPage ? (
                             <ScrollLink 
                                 to='contact' 
