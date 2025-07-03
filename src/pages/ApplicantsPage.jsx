@@ -208,8 +208,6 @@ const PartnerCount = styled.p`
   font-weight: 500;
 `;
 
-// The rest of the file remains unchanged.
-
 const FAQItem = ({ question, answer }) => {
   const [open, setOpen] = useState(false);
 
@@ -301,6 +299,139 @@ const TextArea = styled.textarea`
   }
 `;
 
+const MainBg = styled.div`
+  min-height: 100vh;
+  background: linear-gradient(120deg, #f8f9ff 0%, #e0e7ff 100%);
+`;
+
+const HeroSection = styled.section`
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+  border-radius: 30px;
+  margin: 40px 0 60px 0;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    min-height: 220px;
+    margin: 20px 0 30px 0;
+    border-radius: 18px;
+  }
+`;
+
+const HeroOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: rgba(60, 60, 120, 0.38);
+  z-index: 1;
+`;
+
+const HeroContent = styled.div`
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  padding: 40px 20px;
+
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, #fff 60%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.15;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 32px;
+    color: #f3f4f6;
+
+    .highlight {
+      color: #f3f4f6;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+`;
+
+const TestimonialGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 18px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+`;
+
+const TestimonialCard = styled(Testimonial)`
+  background: #fff;
+  border: 1px solid #e0e7ff;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.08);
+  border-radius: 18px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const FAQGrid = styled.div`
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const FormIntro = styled.p`
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: #4b5563;
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const FormCard = styled.div`
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.10);
+  padding: 32px 28px 24px 28px;
+  max-width: 500px;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    padding: 18px 8px 14px 8px;
+    border-radius: 12px;
+  }
+`;
+
+const OrDivider = styled.p`
+  text-align: center;
+  margin: 18px 0 8px 0;
+  font-weight: 600;
+  color: #a3a3a3;
+  letter-spacing: 0.08em;
+  font-size: 1rem;
+`;
+
 export default function ApplicantsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessageVisible, setSuccessMessageVisible] = useState(false);
@@ -375,102 +506,104 @@ export default function ApplicantsPage() {
 };
 
   return (
-    <div className="overflow-hidden">
+    <MainBg>
       <PageContainer>
         <motion.div initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.5 }}>
-      <CTASection>
-        <CTAContent>
-          <motion.h2 initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.6 }}>
-            Become a Growth Partner
-          </motion.h2>
-          <motion.p initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.7 }}>
-            Refer buyers, earn commissions, and grow with us. Join hundreds of successful partners!
-          </motion.p>
-          <CTAButtonGroup>
-            <ScrollLink to="applicationForm" smooth={true} duration={600} offset={-60}>
-              <PrimaryButton>Apply Now</PrimaryButton>
-            </ScrollLink>
-          </CTAButtonGroup>
-        </CTAContent>
-      </CTASection>
+          <HeroSection>
+            <HeroOverlay />
+            <HeroContent>
+              <motion.h1 initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.6 }}>
+                Become a Growth Partner
+              </motion.h1>
+              <motion.p initial="hidden" whileInView="visible" variants={scrollMotion} transition={{ duration: 0.7 }}>
+                Refer buyers, earn commissions, and grow with us.<br />
+                <span className="highlight">Join hundreds of successful partners!</span>
+              </motion.p>
+              <CTAButtonGroup>
+                <ScrollLink to="applicationForm" smooth={true} duration={600} offset={-60}>
+                  <PrimaryButton>Apply Now</PrimaryButton>
+                </ScrollLink>
+              </CTAButtonGroup>
+            </HeroContent>
+          </HeroSection>
 
-      <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
-        <SectionTitle>Why Join Our Referral Program?</SectionTitle>
-        <HighlightBox>
-          Earn money by connecting people to products they already need. No investment, no hassle. Just share and earn. Whether you’re a student, entrepreneur, or simply have a strong network, this is your opportunity to grow with us.
-        </HighlightBox>
-      </SectionContainer>
+          <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
+            <SectionTitle>Why Join Our Referral Program?</SectionTitle>
+            <HighlightBox>
+              Earn money by connecting people to products they already need. No investment, no hassle. Just share and earn. Whether you’re a student, entrepreneur, or simply have a strong network, this is your opportunity to grow with us.
+            </HighlightBox>
+          </SectionContainer>
 
-      <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
-        <SectionTitle>What Our Partners Say</SectionTitle>
-        {testimonials.map((item, index) => (
-          <Testimonial key={index} initial="hidden" whileInView="visible" variants={scrollMotion}>
-            <p>“{item.comment}”</p>
-            <span>- {item.name}</span>
-          </Testimonial>
-        ))}
-        <PartnerCount>Trusted by <strong>85+</strong> partners</PartnerCount>
-      </SectionContainer>
+          <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
+            <SectionTitle>What Our Partners Say</SectionTitle>
+            <TestimonialGrid>
+              {testimonials.map((item, index) => (
+                <TestimonialCard key={index} initial="hidden" whileInView="visible" variants={scrollMotion}>
+                  <p>“{item.comment}”</p>
+                  <span>- {item.name}</span>
+                </TestimonialCard>
+              ))}
+            </TestimonialGrid>
+            <PartnerCount>Trusted by <strong>85+</strong> partners</PartnerCount>
+          </SectionContainer>
 
-      <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
-        <SectionTitle>Frequently Asked Questions</SectionTitle>
-        {faqs.map((faq, index) => (
-          <FAQItem key={index} question={faq.question} answer={faq.answer} />
-        ))}
-      </SectionContainer>
+          <SectionContainer initial="hidden" whileInView="visible" variants={scrollMotion}>
+            <SectionTitle>Frequently Asked Questions</SectionTitle>
+            <FAQGrid>
+              {faqs.map((faq, index) => (
+                <FAQItem key={index} question={faq.question} answer={faq.answer} />
+              ))}
+            </FAQGrid>
+          </SectionContainer>
 
-      <SectionContainer id="applicationForm" initial="hidden" whileInView="visible" variants={scrollMotion}>
-        <SectionTitle>Apply to Become a Partner</SectionTitle>
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '1.1rem', color: '#4b5563', textAlign: 'center', marginBottom: '30px' }}>
-          Fill out the form below and we’ll get back to you shortly.
-        </p>
-        <FormContainer>
-          <Form onSubmit={handleSubmit}>
-            <Input type="text" name='name' value={formData.name} onChange={handleChange} placeholder="Full Name" required />
-            <Input type="email" name='email' value={formData.email} onChange={handleChange} placeholder="Email Address" required />
-            <Input type="tel" name='phone' value={formData.phone} onChange={handleChange} placeholder="Phone Number" required />
-            <Input type="text" name='location' value={formData.location} onChange={handleChange} placeholder="Location (City, Country)" required />
-            <TextArea rows="4" name='reason' value={formData.reason} onChange={handleChange} placeholder="Tell us briefly why you'd be a great Growth Partner (optional)"/>
-            <PrimaryButton 
-              type="submit"
-              disabled={isSubmitting}
-              className={`w-full py-2 px-4 rounded-lg text-white ${
-                isSubmitting ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
-            {isSubmitting ? "Submitting..." : "Submit"}
-            </PrimaryButton>
-
-            <AnimatePresence>
-            {successMessageVisible && (
-            <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{ 
-              color: '#10B981', 
-              textAlign: 'center', 
-              marginTop: '15px', 
-              fontWeight: '500', 
-              fontSize: '1rem' 
-            }}>
-              ✅ Application submitted successfully! We’ll be in touch soon.
-            </motion.p>
-            )}
-            </AnimatePresence>
-
-
-
-            <p style={{ textAlign: 'center', marginTop: '10px', fontWeight: '600', color: '#6b7280' }}>OR</p>
-            <WhatsAppLink href="https://wa.me/233532518124?text=Hello!%20I'm%20interested%20in%20becoming%20a%20Growth%20Partner.%20Here%20are%20my%20details%3A%0A-Name%3A%20%0A-Email%3A%20%0APhone%3A%20%0ALocation%3A%20%0AReason%3A%20" target="_blank">
-               Apply via WhatsApp
-            </WhatsAppLink>
-          </Form>
-        </FormContainer>
-      </SectionContainer>
-      </motion.div>
-    </PageContainer>
-    </div>
+          <SectionContainer id="applicationForm" initial="hidden" whileInView="visible" variants={scrollMotion}>
+            <SectionTitle>Apply to Become a Partner</SectionTitle>
+            <FormIntro>
+              Fill out the form below and we’ll get back to you shortly.
+            </FormIntro>
+            <FormCard>
+              <Form onSubmit={handleSubmit}>
+                <Input type="text" name='name' value={formData.name} onChange={handleChange} placeholder="Full Name" required />
+                <Input type="email" name='email' value={formData.email} onChange={handleChange} placeholder="Email Address" required />
+                <Input type="tel" name='phone' value={formData.phone} onChange={handleChange} placeholder="Phone Number" required />
+                <Input type="text" name='location' value={formData.location} onChange={handleChange} placeholder="Location (City, Country)" required />
+                <TextArea rows="4" name='reason' value={formData.reason} onChange={handleChange} placeholder="Tell us briefly why you'd be a great Growth Partner (optional)"/>
+                <PrimaryButton 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full py-2 px-4 rounded-lg text-white ${
+                    isSubmitting ? "bg-gray-500" : "bg-blue-500 hover:bg-blue-600"
+                  }`}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </PrimaryButton>
+                <AnimatePresence>
+                  {successMessageVisible && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.5 }}
+                      style={{ 
+                        color: '#10B981', 
+                        textAlign: 'center', 
+                        marginTop: '15px', 
+                        fontWeight: '500', 
+                        fontSize: '1rem' 
+                      }}>
+                      ✅ Application submitted successfully! We’ll be in touch soon.
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+                <OrDivider>OR</OrDivider>
+                <WhatsAppLink href="https://wa.me/233532518124?text=Hello!%20I'm%20interested%20in%20becoming%20a%20Growth%20Partner.%20Here%20are%20my%20details%3A%0A-Name%3A%20%0A-Email%3A%20%0APhone%3A%20%0ALocation%3A%20%0AReason%3A%20" target="_blank">
+                 Apply via WhatsApp
+                </WhatsAppLink>
+              </Form>
+            </FormCard>
+          </SectionContainer>
+        </motion.div>
+      </PageContainer>
+    </MainBg>
   );
 }
