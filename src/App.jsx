@@ -10,6 +10,8 @@ import ApplicantsPage from './pages/ApplicantsPage' // <-- Add this import
 import Boost from './pages/Boost' // <-- Add this import
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import Gallery from './components/Gallery'
+import DemoWebsites from './components/DemoWebsites'
 
 const Home = () => {
   return (
@@ -17,6 +19,8 @@ const Home = () => {
       <Hero />
       <About />
       <Service />
+      <Gallery />
+      <DemoWebsites />
       <Testimonial />
       <Contact />
     </main>

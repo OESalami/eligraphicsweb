@@ -7,153 +7,171 @@ import Logo from '../assets/images/logo.png';
 import useActiveTab from '../hooks/useActiveTab';
 
 const Navbar = () => {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { activeTab, handleSetActiveTab } = useActiveTab();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { activeTab, handleSetActiveTab } = useActiveTab();
 
-    const isSellWithUsPage = location.pathname === '/partnership';
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
-    };
+  const isMainPage = location.pathname === '/';
 
-    // Checking if we're on the main page
-    const isMainPage = location.pathname === '/';
+  const handleNavigation = (section) => {
+    handleSetActiveTab(section);
+    navigate('/');
+    setTimeout(() => {
+      const element = document.getElementById(section);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
 
-    // Handle navigation for non-main pages
-    const handleNavigation = (section) => {
-      handleSetActiveTab(section);
-      navigate('/');
-      setTimeout(() => {
-        const element = document.getElementById(section);
-        element?.scrollIntoView({ behavior: 'smooth'});
-      }, 100);
-    };
+  const navItemStyles = (section) => `
+    cursor-pointer font-medium tracking-wide
+    ${activeTab === section ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-100 hover:text-green-400'}
+    transition-all duration-300
+  `;
 
-    const navItemStyles = (section) => `
-      cursor-pointer
-      ${activeTab === section ? 'text-blue-400 font-bold' : 'text-gray-200 hover:text-blue-400'}
-      transition-colors duration-300
-    `;
+  return (
+    <header
+      className={`sticky top-0 z-50 bg-[#0b0b0d] backdrop-blur-sm text-white transition-all duration-300`}
+    >
+      <nav className="container mx-auto flex items-center justify-between px-4 sm:px-6 md:px-8 py-3 md:py-4 h-20">
+        {/* Logo Section */}
+        <div className="flex items-center space-x-2 cursor-pointer">
+          <ScrollLink
+            to="home"
+            smooth={true}
+            duration={500}
+            className="flex items-center"
+          >
+            <img
+              src={Logo}
+              alt="Logo"
+              className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+            />
+            <h3 className="hidden sm:block text-xl sm:text-2xl bg-gradient-to-r from-green-400 to-white bg-clip-text text-transparent font-extrabold uppercase">
+              ELIGWEB
+            </h3>
+          </ScrollLink>
+        </div>
 
-    // Example: adjust these paths to match your routes
-    const activeNav = 
-      location.pathname === '/partnership' ? 'partnership'
-      : location.pathname === '/' ? 'home'
-      : '';
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+          {isMainPage ? (
+            <>
+              <ScrollLink
+                to="home"
+                spy
+                smooth
+                duration={500}
+                className={navItemStyles('home')}
+                onClick={() => handleSetActiveTab('home')}
+              >
+                Home
+              </ScrollLink>
+              <ScrollLink
+                to="about"
+                spy
+                smooth
+                duration={500}
+                className={navItemStyles('about')}
+                onClick={() => handleSetActiveTab('about')}
+              >
+                About
+              </ScrollLink>
+              <ScrollLink
+                to="service"
+                spy
+                smooth
+                duration={500}
+                className={navItemStyles('service')}
+                onClick={() => handleSetActiveTab('service')}
+              >
+                Service
+              </ScrollLink>
+              <ScrollLink
+                to="testimonial"
+                spy
+                smooth
+                duration={500}
+                className={navItemStyles('testimonial')}
+                onClick={() => handleSetActiveTab('testimonial')}
+              >
+                Testimonial
+              </ScrollLink>
+            </>
+          ) : (
+            <>
+              {['home', 'about', 'service', 'testimonial'].map((section) => (
+                <button
+                  key={section}
+                  onClick={() => handleNavigation(section)}
+                  className={navItemStyles(section)}
+                >
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
+                </button>
+              ))}
+            </>
+          )}
 
-    return (
-        <header className={`sticky ${isSellWithUsPage ? 'bg-[#0b0b0d]' : 'bg-[#0b0b0d]'} 
-text-gray-200 top-0 z-50 transition-colors duration-300`}>
-            <nav className="container h-20 mx-auto flex items-center justify-between py-4 px-6">
-                {/* Left - Logo */}
-                <div className="flex items-center">
-                    <ScrollLink to="/" className="flex items-center text-3xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-extrabold uppercase cursor-pointer">
-                        <img src={Logo} alt="Logo" className="h-12 w-12 mr-2 text-blue" />
-                        <h3 className="m-0 p-0 sm:text-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hidden sm:block">
-                            ELIGWEB
-                        </h3>
-                    </ScrollLink>
-                </div>
+          {/* <RouterLink
+            to="/partnership"
+            className={navItemStyles('partnership')}
+            onClick={() => handleSetActiveTab('partnership')}
+          >
+            Partnership
+          </RouterLink>
 
-                {/* Middle - Links */}
-                <div className='text-x items-center'>
-                    <div className='hidden md:flex space-x-4 justify-center items-center'>
-                        {isMainPage ? (
-                            <>
-                                <ScrollLink to='home' spy={true} smooth={true} duration={500} 
-                                    className={navItemStyles('home')}
-                                    onClick={() => handleSetActiveTab('home')} > Home </ScrollLink>
-                                <ScrollLink 
-                                    to='about' 
-                                    spy={true}
-                                    smooth={true} 
-                                    duration={500} 
-                                    className={navItemStyles('about')}
-                                    onClick={() => handleSetActiveTab('about')}
-                                >
-                                    About
-                                </ScrollLink>
-                                <ScrollLink 
-                                    to='service' 
-                                    spy={true}
-                                    smooth={true} 
-                                    duration={500} 
-                                    className={navItemStyles('service')}
-                                    onClick={() => handleSetActiveTab('service')}
-                                >
-                                    Service
-                                </ScrollLink>
-                                <ScrollLink 
-                                    to='testimonial' 
-                                    spy={true}
-                                    smooth={true} 
-                                    duration={500} 
-                                    className={navItemStyles('testimonial')}
-                                    onClick={() => handleSetActiveTab('testimonial')}
-                                >
-                                    Testimonial
-                                </ScrollLink>
-                            </>
-                        ) : (
-                            <>
-                                <button onClick={() => handleNavigation('home')} className={navItemStyles('home')}>Home</button>
-                                <button onClick={() => handleNavigation('about')} className={navItemStyles('about')}>About</button>
-                                <button onClick={() => handleNavigation('service')} className={navItemStyles('service')}>Service</button>
-                                <button onClick={() => handleNavigation('testimonial')} className={navItemStyles('testimonial')}>Testimonial</button>
-                            </>
-                        )}
-                        <RouterLink 
-                            to='/partnership' 
-                            className={navItemStyles('partnership')}
-                            onClick={() => handleSetActiveTab('partnership')}
-                        >
-                            Partnership
-                        </RouterLink>
-                        <RouterLink 
-                            to='/booster' 
-                            className={navItemStyles('booster')}
-                            onClick={() => handleSetActiveTab('booster')}
-                        >
-                            Booster
-                        </RouterLink>
-                        <RouterLink 
-                            to='/agents'
-                        > 
-                        </RouterLink>
+          <RouterLink
+            to="/booster"
+            className={navItemStyles('booster')}
+            onClick={() => handleSetActiveTab('booster')}
+          >
+            Booster
+          </RouterLink> */}
 
-                        {isMainPage ? (
-                            <ScrollLink 
-                                to='contact' 
-                                spy={true}
-                                smooth={true} 
-                                duration={500}
-                                onClick={() => handleSetActiveTab('contact')}
-                            >
-                                <button className={`py-1 px-4 ${activeTab === 'contact' ? 'bg-purple-500' : 'bg-blue-500 hover:bg-purple-500'} text-[#BEC9C3]  rounded-full transition-colors duration-300`}>Contact</button>       
-                            </ScrollLink>
-                        ) : (
-                            <button 
-                                onClick={() => handleNavigation('contact')} 
-                                className={`py-1 px-4 ${activeTab === 'contact' ? 'bg-purple-500' : 'bg-blue-500 hover:bg-purple-500'} text-[#BEC9C3] font-semibold rounded-full transition-colors duration-300`}
-                            >
-                                Contact
-                            </button>
-                        )}
-                    </div>
+          {/* Contact Button */}
+          {isMainPage ? (
+            <ScrollLink
+              to="contact"
+              spy
+              smooth
+              duration={500}
+              onClick={() => handleSetActiveTab('contact')}
+            >
+              <button className="py-2 px-5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full transition-all duration-300 shadow-sm">
+                Contact
+              </button>
+            </ScrollLink>
+          ) : (
+            <button
+              onClick={() => handleNavigation('contact')}
+              className="py-2 px-5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full transition-all duration-300 shadow-sm"
+            >
+              Contact
+            </button>
+          )}
+        </div>
 
-                    {/* Hamburger Menu */}
-                    <button onClick={toggleMenu} className='flex md:hidden'>
-                        <HiBars3BottomRight className='h-7 w-7 text-white' />
-                    </button>
-                </div>  
+        {/* Mobile Menu Button */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden p-2 rounded-md hover:bg-white/10 transition"
+          aria-label="Toggle Menu"
+        >
+          <HiBars3BottomRight className="h-7 w-7 text-green-400" />
+        </button>
 
-                {/* Side Menu */}
-                <SideMenu toggleMenu={toggleMenu} menuOpen={menuOpen} />
-            </nav>
-        </header>
-    );
+        {/* Side Menu (Mobile only) */}
+{menuOpen && (
+  <div className="md:hidden">
+    <SideMenu toggleMenu={toggleMenu} menuOpen={menuOpen} />
+  </div>
+)}
+
+      </nav>
+    </header>
+  );
 };
 
 export default Navbar;

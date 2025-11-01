@@ -1,72 +1,108 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import Who from '../assets/images/who-we-are.jpg'
-import Our from '../assets/images/our-mission.jpg'
-import Why from '../assets/images/why-us.jpg'
+import { motion } from "framer-motion";
+import {
+  FaUsers,
+  FaBullseye,
+  FaCrown,
+} from "react-icons/fa";
 
 const sections = [
   {
     title: "Who We Are",
-    text: "We specialize in website development, graphic design, AR business cards, and more. Our focus is on delivering high-quality digital solutions tailored to your needs.",
-    image: Who,
+    text: "At EligraphicsWeb, we merge creativity and technology to deliver powerful digital experiences — from modern websites to standout brand designs.",
+    icon: <FaUsers className="text-green-600 text-6xl md:text-7xl" />,
   },
   {
     title: "Our Mission",
-    text: "We combine creativity, technology, and strategy to bring your vision to life. Our goal is to help businesses and individuals establish a strong online presence.",
-    image: Our,
+    text: "We aim to empower individuals and businesses to establish impactful online presences with clean design, speed, and strategy.",
+    icon: <FaBullseye className="text-green-600 text-6xl md:text-7xl" />,
   },
   {
     title: "Why Choose Us?",
-    text: "We offer modern designs, cutting-edge technology, and fast, reliable services to ensure your brand stands out in the digital world.",
-    image: Why,
+    text: "We believe in excellence. Our solutions combine performance, beauty, and functionality — ensuring your brand leads in the digital space.",
+    icon: <FaCrown className="text-green-600 text-6xl md:text-7xl" />,
   },
 ];
 
 const About = () => {
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
-
   return (
-    <div className="about min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
-      <div className="w-full max-w-7xl px-4 lg:px-8 py-16 text-center">
-        {/* Section Title */}
-        <motion.h1
-          className="text-4xl font-bold mb-12 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          ABOUT US
-          <p className="text-xl space-x-2 text-gray-200 font-normal text-gray-200">Get To Know Us Better</p>
-        </motion.h1>
+    <div
+      id="about"
+      className="relative min-h-screen bg-white text-gray-800 overflow-hidden"
+    >
+      {/* Header Section (unchanged) */}
+      <motion.div
+        className="text-center pt-24 pb-16"
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <p className="text-green-500 uppercase tracking-wide font-semibold text-sm">
+          # About EligraphicsWeb
+        </p>
+        <h1 className="text-5xl md:text-6xl font-extrabold mt-2">
+          We Build <span className="text-green-600">Brands</span> That Inspire
+        </h1>
+        <p className="mt-3 text-gray-500 text-lg">
+          Transforming visions into creative realities.
+        </p>
+      </motion.div>
 
-        <div className="space-y-16">
-          {sections.map((section, index) => (
-            <motion.div
-              key={index}
-              className="sticky top-16 w-full flex flex-col sm:flex-row items-center justify-center bg-gray-800/30 backdrop-blur-md rounded-xl shadow-lg overflow-hidden"
-              style={{ scale }}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-            >
-              {/* Image Section */}
-              <div className="w-full sm:w-1/2 h-64 md:h-80 flex-shrink-0">
-                <img
-                  src={section.image}
-                  alt={section.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+      {/* Icon Sections */}
+      <div className="w-full max-w-6xl mx-auto px-6 space-y-20 md:space-y-28 pb-24">
+        {sections.map((section, index) => (
+          <motion.div
+            key={index}
+            className={`relative flex flex-col ${
+              index % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"
+            } items-center justify-between gap-12`}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: index * 0.1 }}
+            viewport={{ once: true }}
+          >
+            {/* Icon Container */}
+            <div className="relative w-full md:w-1/2 flex justify-center items-center">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center justify-center w-40 h-40 md:w-52 md:h-52 rounded-full bg-green-50 border border-green-200 shadow-md"
+              >
+                {section.icon}
+              </motion.div>
+              {/* Soft glow */}
+              <div
+                className="absolute inset-0 rounded-full blur-3xl opacity-30 -z-10"
+                style={{
+                  background:
+                    index % 2 === 0
+                      ? "radial-gradient(circle at top left, rgba(0,255,153,0.2), transparent)"
+                      : "radial-gradient(circle at top right, rgba(0,255,255,0.2), transparent)",
+                }}
+              ></div>
+            </div>
 
-              {/* Text Section */}
-              <div className="w-full sm:w-1/2 p-6 md:p-10 text-center sm:text-left">
-                <h1 className="text-3xl font-bold">{section.title}</h1>
-                <p className="mt-4 text-lg">{section.text}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+            {/* Text Content */}
+            <div className="w-full md:w-1/2 text-center md:text-left space-y-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                <span className="text-green-600">{section.title.split(" ")[0]}</span>{" "}
+                {section.title.split(" ").slice(1).join(" ")}
+              </h2>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                {section.text}
+              </p>
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                className="inline-block mt-4 px-8 py-3 rounded-full border border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors duration-300"
+              >
+                Learn More
+              </motion.a>
+            </div>
+          </motion.div>
+        ))}
       </div>
+
+      {/* Subtle Bottom Accent */}
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-green-100 to-transparent blur-2xl"></div>
     </div>
   );
 };
